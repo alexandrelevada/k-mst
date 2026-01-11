@@ -45,6 +45,7 @@ from sklearn.metrics.cluster import adjusted_rand_score
 from sklearn.metrics.cluster import adjusted_mutual_info_score
 from sklearn.metrics.cluster import fowlkes_mallows_score
 from sklearn.metrics.cluster import v_measure_score
+from sklearn.covariance import LedoitWolf
 
 
 # To avoid unnecessary warning messages
@@ -108,6 +109,8 @@ def Curvature_Estimation(dados, k):
             # Local first form 
             I = np.cov(amostras.T)
             I = I + 0.0001*np.eye(I.shape[0])
+            # covariance = LedoitWolf().fit(amostras)
+            # I = covariance.covariance_
         else:
             I = np.eye(m)
         # Compute the eigenvectors
@@ -240,14 +243,14 @@ def plot_graph(G, target, layout='spring', pos=0):
 ##############################################
 ############# Data loading
 ##############################################
-X = skdata.load_iris()
+#X = skdata.load_iris()
 #X = skdata.load_wine()
 #X = skdata.load_digits()
 #X = skdata.fetch_openml(name='mfeat-karhunen', version=1)
 #X = skdata.fetch_openml(name='energy-efficiency', version=1) 
 #X = skdata.fetch_openml(name='spectrometer', version=1)
 #X = skdata.fetch_openml(name='car-evaluation', version=1)
-#X = skdata.fetch_openml(name='thyroid-new', version=1)  
+X = skdata.fetch_openml(name='thyroid-new', version=1)  
 #X = skdata.fetch_openml(name='arrhythmia', version=1)   
 #X = skdata.fetch_openml(name='Touch2', version=1)   
 #X = skdata.fetch_openml(name='seeds', version=1)
@@ -362,17 +365,5 @@ print('Fowlkes Mallows index: %f' %fowlkes_mallows_score(target, labels))
 print('V-measure: %f' %v_measure_score(target, labels))
 print()
 
-# Maximum curvature tree
-t = mst_clustering_divisive_CH(T_max, dados, target)
-labels = label_samples(t, target)
-
-print('Maximum Information Tree based indices')
-print('---------------------------------------')
-print('Adjusted Rand index: %f' %adjusted_rand_score(target, labels))
-print('Adjusted mutual info score: %f' %adjusted_mutual_info_score(target, labels))
-print('Fowlkes Mallows index: %f' %fowlkes_mallows_score(target, labels))
-print('V-measure: %f' %v_measure_score(target, labels))
-
 # Plot tree
-plot_graph(T_mst, target, layout='kawai')
-plot_graph(T_max, target, layout='kawai')
+#plot_graph(T_mst, target, layout='kawai')
